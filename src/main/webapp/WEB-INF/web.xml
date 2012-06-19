@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+    version="2.5">
+
+    <display-name>websocket-app</display-name>
+
+    <filter>
+        <filter-name>wicket.websocket</filter-name>
+        <filter-class>org.apache.wicket.protocol.http.Jetty7WebSocketFilter</filter-class>
+        <!--<filter-class>org.apache.wicket.protocol.http.Tomcat7WebSocketFilter</filter-class>-->
+        <init-param>
+            <param-name>applicationClassName</param-name>
+            <param-value>org.apache.wicket.websocket.jetty.example.WicketApplication</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>wicket.websocket</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <session-config>
+        <session-timeout>1</session-timeout>
+    </session-config>
+
+</web-app>
