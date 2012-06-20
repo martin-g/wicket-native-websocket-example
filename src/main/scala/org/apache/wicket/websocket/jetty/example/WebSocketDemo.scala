@@ -49,7 +49,7 @@ class WebSocketDemo extends WebPage {
      */
     override protected def onMessage(handler: WebSocketRequestHandler, data: TextMessage)
     {
-      getSession.info("You typed: " + data.getMessage)
+      getSession.info("You typed: " + data.getText)
       handler.add(feedback)
       handler.push("A message pushed by the server via WebSocketRequestHandler!")
     }
