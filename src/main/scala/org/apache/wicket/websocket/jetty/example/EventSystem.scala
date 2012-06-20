@@ -138,7 +138,7 @@ class EventSystem(val application: Application)
           val application = Application.get(c.applicationName)
           val connectionRegistry = new SimpleWebSocketConnectionRegistry();
           val webSocketConnection = connectionRegistry.getConnection(application, c.sessionId, c.pageId)
-          webSocketConnection.sendMessage("Pushed asynchronous message from Akka!")
+          webSocketConnection.sendMessage("A message pushed asynchronously by Akka directly to the plain WebSocketConnection!")
         })
       }
     }

@@ -17,19 +17,16 @@
 
 jQuery(function($) {
 
-	var ws = null;
-
 	Wicket.Event.subscribe("/websocket/open", function(jqEvent) {
 		$('#connexion').hide();
 		$('#sentMessages').show();
 	});
 
-	Wicket.Event.subscribe("/websocket/message", function(jqEvent, data) {
-		$('#messages').prepend('<span>' + data + '</span><br/>');
+	Wicket.Event.subscribe("/websocket/message", function(jqEvent, message) {
+		$('#messages').prepend('<span>' + message + '</span><br/>');
 	});
 
 	var close = function(jqEvent) {
-		ws = null;
 		$('#sentMessages').hide();
 		$('#connexion').show();
 		$('#messages').empty();
@@ -39,21 +36,16 @@ jQuery(function($) {
 	Wicket.Event.subscribe("/websocket/error", close);
 
 	$('#connect').click(function() {
-
-		ws = new Wicket.WebSocket();
+		Wicket.WebSocket.createDefaultConnection();
 	});
 
 	$('#send').click(function() {
-		if (ws) {
-			ws.send($('#message').val());
-			$('#message').val('');
-		}
+		Wicket.WebSocket.send($('#message').val());
+		$('#message').val('');
 	});
 
 	$('#disconnect').click(function() {
-		if (ws) {
-			ws.close();
-		}
+		Wicket.WebSocket.close();
 	});
 
 });

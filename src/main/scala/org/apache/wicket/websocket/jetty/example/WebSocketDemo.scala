@@ -1,20 +1,21 @@
 package org.apache.wicket.websocket.jetty.example
 
-import org.apache.wicket.markup.head.{IHeaderResponse, JavaScriptHeaderItem}
+import org.apache.wicket.markup.head.{HeaderItem, IHeaderResponse, JavaScriptHeaderItem}
 import org.apache.wicket.markup.html.WebPage
 import org.apache.wicket.request.resource.PackageResourceReference
 import org.apache.wicket.ajax.markup.html.AjaxLink
 import org.apache.wicket.ajax.{AjaxRequestTarget, WebSocketRequestHandler}
 import org.apache.wicket.markup.html.panel.FeedbackPanel
-import org.apache.wicket.protocol.ws.api.{SimpleWebSocketConnectionRegistry, WebSocketBehavior}
+import org.apache.wicket.protocol.ws.api.{WicketWebSocketJQueryResourceReference, SimpleWebSocketConnectionRegistry, WebSocketBehavior}
 import org.apache.wicket.protocol.ws.api.message.{ClosedMessage, ConnectedMessage, TextMessage}
+import java.util
 
 /**
- * A (ugly) demo page for WebSocketBehavior
+ * A demo page for native WebSocket support
  */
 class WebSocketDemo extends WebPage {
 
-  val feedback = new FeedbackPanel("feedback");
+  val feedback = new FeedbackPanel("feedback")
   feedback.setOutputMarkupId(true)
   add(feedback)
 
@@ -51,7 +52,7 @@ class WebSocketDemo extends WebPage {
     {
       getSession.info("You typed: " + data.getText)
       handler.add(feedback)
-      handler.push("A message pushed by the server via WebSocketRequestHandler!")
+      handler.push("A message pushed by the server by using the WebSocketRequestHandler that is available in WebSocketBehavior#onMessage!")
     }
   })
 
@@ -66,7 +67,7 @@ class WebSocketDemo extends WebPage {
       if (connection != null)
       {
         val webSocketHandler = new WebSocketRequestHandler(this, connection)
-        webSocketHandler.push("A message pushed by clicking a normal AjaxLink")
+        webSocketHandler.push("A message pushed by creating WebSocketRequestHandler manually in an Ajax request")
       }
       getSession.info("AjaxLink clicked")
       target.add(feedback)
@@ -77,7 +78,18 @@ class WebSocketDemo extends WebPage {
   {
     super.renderHead(response)
 
-    response.render(JavaScriptHeaderItem.forReference(
-      new PackageResourceReference(classOf[WebSocketDemo], "client.js")))
+    response.render(JavaScriptHeaderItem.forReference(new ClientResourceReference))
+  }
+
+  /**
+   * A custom resource reference that depends on WicketWebSocketJQueryResourceReference
+   */
+  private class ClientResourceReference extends PackageResourceReference(classOf[WebSocketDemo], "client.js")
+  {
+     override def getDependencies: util.ArrayList[HeaderItem] = {
+       val list = new util.ArrayList[HeaderItem]()
+       list.add(JavaScriptHeaderItem.forReference(WicketWebSocketJQueryResourceReference.get()))
+       list
+     }
   }
 }
