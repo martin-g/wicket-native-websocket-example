@@ -2,10 +2,16 @@ package org.apache.wicket.websocket.jetty.example
 
 import org.apache.wicket.protocol.http.WebApplication
 
+object NativeWebSocketExampleApplication
+{
+	def get = WebApplication.get().asInstanceOf[NativeWebSocketExampleApplication]
+}
+
 /**
- *
+ * The application class that setups the event system that pushes messages
+  * to the connected clients
  */
-class WicketApplication extends WebApplication
+class NativeWebSocketExampleApplication extends WebApplication
 {
   var eventSystem : EventSystem = _
 
@@ -25,9 +31,5 @@ class WicketApplication extends WebApplication
   def getEventSystem = eventSystem
 }
 
-object WicketApplication
-{
-  def get = WebApplication.get().asInstanceOf[WicketApplication]
-}
 
 

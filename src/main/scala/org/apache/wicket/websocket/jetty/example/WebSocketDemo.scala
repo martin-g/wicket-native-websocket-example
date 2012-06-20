@@ -26,7 +26,7 @@ class WebSocketDemo extends WebPage {
       val sessionId = message.getSessionId
       val pageId = message.getPageId
       // register in the global registry. Optional
-      WicketApplication.get.getEventSystem.clientConnected(application.getName, sessionId, pageId)
+      NativeWebSocketExampleApplication.get.getEventSystem.clientConnected(application.getName, sessionId, pageId)
     }
 
     protected override def onClose(message: ClosedMessage)
@@ -35,7 +35,7 @@ class WebSocketDemo extends WebPage {
       val sessionId = message.getSessionId
       val pageId = message.getPageId
       // unregister in the global registry. Optional
-      WicketApplication.get.getEventSystem.clientDisconnected(application.getName, sessionId, pageId)
+      NativeWebSocketExampleApplication.get.getEventSystem.clientDisconnected(application.getName, sessionId, pageId)
     }
 
     /**

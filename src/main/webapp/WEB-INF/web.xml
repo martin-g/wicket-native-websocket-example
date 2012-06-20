@@ -13,7 +13,7 @@
         <!--<filter-class>org.apache.wicket.protocol.http.Tomcat7WebSocketFilter</filter-class>-->
         <init-param>
             <param-name>applicationClassName</param-name>
-            <param-value>org.apache.wicket.websocket.jetty.example.WicketApplication</param-value>
+            <param-value>org.apache.wicket.websocket.jetty.example.NativeWebSocketExampleApplication</param-value>
         </init-param>
     </filter>
 
