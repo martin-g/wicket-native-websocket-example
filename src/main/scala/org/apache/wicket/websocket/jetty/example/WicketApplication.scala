@@ -12,14 +12,14 @@ class WicketApplication extends WebApplication
   override def getHomePage = classOf[WebSocketDemo]
 
   override def init() {
-    super.init
+    super.init()
 
-    eventSystem = new EventSystem(this);
+    eventSystem = new EventSystem(this)
   }
 
   override def onDestroy() {
-    eventSystem.shutdown
-    super.onDestroy
+    eventSystem.shutdown()
+    super.onDestroy()
   }
 
   def getEventSystem = eventSystem
