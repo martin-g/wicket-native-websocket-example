@@ -1,6 +1,7 @@
 package org.apache.wicket.websocket.jetty.example
 
-import akka.util.duration._
+import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
 import akka.actor.{Props, Actor, ActorSystem}
 import org.apache.wicket.Application
 import org.apache.wicket.protocol.ws.api.SimpleWebSocketConnectionRegistry
@@ -80,7 +81,7 @@ class EventSystem(val application: Application)
    */
   private class MasterActor(val appName: String) extends Actor
   {
-    protected def receive = {
+    def receive = {
 
       case ClientConnect(applicationName, sessionId, pageId) => {
         val worker = Props(new WorkerActor()) // TODO for some reason Props[WorkerActor] fails at instantiation ?!
@@ -89,7 +90,7 @@ class EventSystem(val application: Application)
       }
 
       case ClientDisconnect(applicationName, sessionId, pageId) => {
-        val workerActor = context.actorFor(getActorName(sessionId, pageId))
+        val workerActor = context.actorSelection(getActorName(sessionId, pageId))
         workerActor ! Disconnected
       }
 
@@ -121,7 +122,7 @@ class EventSystem(val application: Application)
     var client: Option[Connected] = None
     val logger = Logging(context.system, this)
 
-    protected def receive = {
+    def receive = {
       case Connected(applicationName, sessionId, pageId) => {
 
         logger.info("Client with session id '{}' and page id '{}' has connected\n", sessionId, pageId)
@@ -136,7 +137,7 @@ class EventSystem(val application: Application)
       case Update(applicationName) => {
         client.foreach(c => {
           val application = Application.get(c.applicationName)
-          val connectionRegistry = new SimpleWebSocketConnectionRegistry();
+          val connectionRegistry = new SimpleWebSocketConnectionRegistry()
           val webSocketConnection = connectionRegistry.getConnection(application, c.sessionId, c.pageId)
           webSocketConnection.sendMessage("A message pushed asynchronously by Akka directly to the plain WebSocketConnection!")
         })

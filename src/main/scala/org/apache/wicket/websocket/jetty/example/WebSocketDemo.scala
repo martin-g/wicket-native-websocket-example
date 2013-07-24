@@ -4,9 +4,9 @@ import org.apache.wicket.markup.head.{HeaderItem, IHeaderResponse, JavaScriptHea
 import org.apache.wicket.markup.html.WebPage
 import org.apache.wicket.request.resource.PackageResourceReference
 import org.apache.wicket.ajax.markup.html.AjaxLink
-import org.apache.wicket.ajax.{AjaxRequestTarget, WebSocketRequestHandler}
+import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.markup.html.panel.FeedbackPanel
-import org.apache.wicket.protocol.ws.api.{WicketWebSocketJQueryResourceReference, SimpleWebSocketConnectionRegistry, WebSocketBehavior}
+import org.apache.wicket.protocol.ws.api.{WebSocketRequestHandler, WicketWebSocketJQueryResourceReference, SimpleWebSocketConnectionRegistry, WebSocketBehavior}
 import org.apache.wicket.protocol.ws.api.message.{ClosedMessage, ConnectedMessage, TextMessage}
 import java.util
 
