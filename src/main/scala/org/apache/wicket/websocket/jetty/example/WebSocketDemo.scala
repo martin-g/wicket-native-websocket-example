@@ -6,9 +6,10 @@ import org.apache.wicket.request.resource.PackageResourceReference
 import org.apache.wicket.ajax.markup.html.AjaxLink
 import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.markup.html.panel.FeedbackPanel
-import org.apache.wicket.protocol.ws.api.{WebSocketRequestHandler, WicketWebSocketJQueryResourceReference, SimpleWebSocketConnectionRegistry, WebSocketBehavior}
+import org.apache.wicket.protocol.ws.api.{IWebSocketConnectionRegistry, WebSocketRequestHandler, WicketWebSocketJQueryResourceReference, WebSocketBehavior}
 import org.apache.wicket.protocol.ws.api.message.{ClosedMessage, ConnectedMessage, TextMessage}
 import java.util
+import org.apache.wicket.protocol.ws.IWebSocketSettings
 
 /**
  * A demo page for native WebSocket support
@@ -62,9 +63,11 @@ class WebSocketDemo extends WebPage {
       // shows how to push into existing WebSocket connection from normal Ajax request
       val sessionId = getSession.getId
       val pageId = getPage.getPageId
-      val registry = new SimpleWebSocketConnectionRegistry()
-      val connection = registry.getConnection(getApplication, sessionId, pageId)
-      if (connection != null)
+      val application = getApplication
+      val settings: IWebSocketSettings = IWebSocketSettings.Holder.get(application)
+      val registry: IWebSocketConnectionRegistry = settings.getConnectionRegistry
+      val connection = registry.getConnection(application, sessionId, pageId)
+      if (connection != null && connection.isOpen)
       {
         val webSocketHandler = new WebSocketRequestHandler(this, connection)
         webSocketHandler.push("A message pushed by creating WebSocketRequestHandler manually in an Ajax request")

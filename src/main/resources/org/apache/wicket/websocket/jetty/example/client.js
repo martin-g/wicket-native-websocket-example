@@ -17,7 +17,7 @@
 
 jQuery(function($) {
 
-	Wicket.Event.subscribe("/websocket/open", function(jqEvent) {
+	Wicket.Event.subscribe("/websocket/open", function() {
 		$('#connexion').hide();
 		$('#sentMessages').show();
 	});
@@ -26,7 +26,7 @@ jQuery(function($) {
 		$('#messages').prepend('<span>' + message + '</span><br/>');
 	});
 
-	var close = function(jqEvent) {
+	var close = function() {
 		$('#sentMessages').hide();
 		$('#connexion').show();
 		$('#messages').empty();
@@ -40,8 +40,9 @@ jQuery(function($) {
 	});
 
 	$('#send').click(function() {
-		Wicket.WebSocket.send($('#message').val());
-		$('#message').val('');
+		var $message = $('#message');
+		Wicket.WebSocket.send($message.val());
+		$message.val('');
 	});
 
 	$('#disconnect').click(function() {
